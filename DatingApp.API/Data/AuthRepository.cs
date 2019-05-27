@@ -25,6 +25,8 @@ namespace DatingApp.API.Data
             if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)){
                 return null;
             }
+
+            return user;
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
@@ -43,7 +45,7 @@ namespace DatingApp.API.Data
             return true;
         }
 
-        public async  Task<User> Register(User user, string password)
+        public async Task<User> Register(User user, string password)
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -53,6 +55,8 @@ namespace DatingApp.API.Data
 
             await _contex.Users.AddAsync(user);
             await _contex.SaveChangesAsync();
+
+            return user;
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
